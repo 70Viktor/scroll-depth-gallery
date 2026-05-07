@@ -22,7 +22,8 @@
     /* Alias */
     "paths": {
       "@assets": ["./src/assets"],
-      "@webgl": ["./src/webgl"]
+      "@webgl": ["./src/webgl"],
+      "@data": ["./src/data"]
     }
   },
   "include": ["src"]

@@ -1,7 +1,7 @@
 import type { Experience } from '@webgl'
 import * as THREE from 'three'
 
-export default class Environment {
+export class Environment {
   private experience: Experience
   private ambientLight: THREE.AmbientLight
   private directionalLight: THREE.DirectionalLight

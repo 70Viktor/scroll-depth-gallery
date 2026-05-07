@@ -2,7 +2,7 @@ import type { Experience } from '@webgl'
 import * as THREE from 'three'
 
 export class Renderer {
-  public instance: THREE.WebGLRenderer
+  instance: THREE.WebGLRenderer
   private experience: Experience
 
   constructor(experience: Experience) {

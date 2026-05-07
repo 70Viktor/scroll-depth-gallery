@@ -5,6 +5,7 @@ export default defineConfig({
     alias: {
       '@assets': '/src/assets',
       '@webgl': '/src/webgl',
+      '@data': '/src/data',
     },
   },
 })
