@@ -1,6 +1,5 @@
 import type { Experience } from '@webgl'
 import * as THREE from 'three'
-import { clamp } from 'three/src/math/MathUtils.js'
 import { config } from '../config'
 import { galleryShaders } from '../shaders'
 
@@ -21,6 +20,7 @@ export class GalleryItem {
   private worldPosition: THREE.Vector3
   private recycledCount = 0
   private scrollOffset = 0
+  private parallaxOffset = new THREE.Vector2()
 
   bgColor: THREE.Color
 
@@ -57,26 +57,12 @@ export class GalleryItem {
     return this.wrapper.position.z
   }
 
-  set resultZ(value: number) {
-    this.wrapper.position.z = value
-  }
-
-  updateResultZ() {
-    const { totalDepth } = config.gallery
-    this.resultZ =
-      this.worldPosition.z + this.recycledCount * totalDepth + this.scrollOffset
-  }
-
   updateWorldPositionZ(z: number) {
     this.worldPosition.z = z
-
-    this.updateResultZ()
   }
 
   shiftRecycleCount(delta: number) {
     this.recycledCount += delta
-
-    this.updateResultZ()
   }
 
   setVelocity(velocity: number) {
@@ -84,16 +70,27 @@ export class GalleryItem {
   }
 
   setOpacity(opacity: number) {
-    this.material.uniforms.u_opacity.value = clamp(opacity, 0, 1)
+    this.material.uniforms.u_opacity.value = THREE.MathUtils.clamp(
+      opacity,
+      0,
+      1,
+    )
   }
 
   update() {
-    const { scroll } = this.experience
-    const { toWorldFactor } = config.scroll
+    const { scroll, pointer } = this.experience
 
-    this.scrollOffset = scroll.current * toWorldFactor
+    this.scrollOffset = scroll.current * config.scroll.toWorldFactor
+    this.parallaxOffset.x = pointer.current.x * config.parallax.strengthX
+    this.parallaxOffset.y = pointer.current.y * config.parallax.strengthY
 
-    this.updateResultZ()
+    const recycleOffset = this.recycledCount * config.gallery.totalDepth
+
+    const x = this.worldPosition.x + this.parallaxOffset.x
+    const y = this.worldPosition.y + this.parallaxOffset.y
+    const z = this.worldPosition.z + this.scrollOffset + recycleOffset
+
+    this.wrapper.position.set(x, y, z)
   }
 
   destroy() {

@@ -1,6 +1,6 @@
 import { data } from '@data'
 import type { Experience } from '@webgl'
-import { inverseLerp } from 'three/src/math/MathUtils.js'
+import * as THREE from 'three'
 import { config } from '../config'
 import { vector2To3 } from '../utils'
 import { GalleryItem, type GalleryItemOptions } from './GalleryItem'
@@ -67,10 +67,12 @@ export class Gallery {
       // recycle
       while (item.resultZ > gallery.frontThreshold) {
         item.shiftRecycleCount(-1)
+        item.update()
       }
 
       while (item.resultZ < gallery.backThreshold) {
         item.shiftRecycleCount(1)
+        item.update()
       }
 
       // deformation
@@ -79,7 +81,8 @@ export class Gallery {
 
       // fade
       const distanceToCamera = Math.abs(camera.position.z - item.resultZ)
-      const opacity = 1 - inverseLerp(fade.from, fade.to, distanceToCamera)
+      const opacity =
+        1 - THREE.MathUtils.inverseLerp(fade.from, fade.to, distanceToCamera)
       item.setOpacity(opacity)
 
       // bg color
@@ -108,7 +111,7 @@ export class Gallery {
 
     if (!currentItem || !nextItem) return
 
-    const progress = inverseLerp(
+    const progress = THREE.MathUtils.inverseLerp(
       currentItem.resultZ,
       nextItem.resultZ,
       startWorld,

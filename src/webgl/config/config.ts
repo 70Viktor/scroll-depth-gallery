@@ -12,7 +12,7 @@ export const config = {
     ease: 0.04,
     speed: 0.25,
     toWorldFactor: 0.03,
-    maxVelocity: 2.5,
+    maxVelocity: 1.5,
   },
   gallery: {
     gap: 5,
@@ -37,5 +37,10 @@ export const config = {
   fade: {
     from: 3.5,
     to: 0.5,
+  },
+  parallax: {
+    smooth: 0.04,
+    strengthX: 0.15,
+    strengthY: 0.08,
   },
 }

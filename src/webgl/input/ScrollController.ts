@@ -1,5 +1,5 @@
 import type { Experience } from '@webgl'
-import { clamp, lerp } from 'three/src/math/MathUtils.js'
+import * as THREE from 'three'
 import { config } from '../config'
 import { roundTo } from '../utils'
 
@@ -50,9 +50,12 @@ export class ScrollController {
     const { ease, maxVelocity } = config.scroll
     const prev = this.current
 
-    this.current = roundTo(lerp(this.current, this.target, ease), 3)
+    this.current = roundTo(
+      THREE.MathUtils.lerp(this.current, this.target, ease),
+      3,
+    )
 
-    this.velocity = clamp(
+    this.velocity = THREE.MathUtils.clamp(
       roundTo(this.current - prev, 2),
       -maxVelocity,
       maxVelocity,

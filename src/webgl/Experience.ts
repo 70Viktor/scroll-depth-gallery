@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { Camera, Debug, Renderer, Sizes, Time } from './core'
-import { ScrollController } from './scroll'
+import { PointerController, ScrollController } from './input'
 import { World } from './world'
 
 export class Experience {
@@ -8,20 +8,24 @@ export class Experience {
   scene: THREE.Scene
 
   debug: Debug
+
+  scroll: ScrollController
+  pointer: PointerController
+
   sizes: Sizes
   time: Time
   camera: Camera
   renderer: Renderer
   world: World
 
-  scroll: ScrollController
-
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
 
     this.scene = new THREE.Scene()
     this.debug = new Debug()
+
     this.scroll = new ScrollController(this)
+    this.pointer = new PointerController()
 
     this.sizes = new Sizes()
     this.time = new Time()
@@ -39,6 +43,7 @@ export class Experience {
   }
 
   private update() {
+    this.pointer.update()
     this.scroll.update()
     this.camera.update()
     this.world.update()
@@ -46,6 +51,7 @@ export class Experience {
   }
 
   destroy() {
+    this.pointer.destroy()
     this.scroll.destroy()
     this.sizes.destroy()
     this.time.destroy()
