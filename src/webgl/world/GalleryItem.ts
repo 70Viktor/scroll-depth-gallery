@@ -2,6 +2,7 @@ import type { Experience } from '@webgl'
 import * as THREE from 'three'
 import { clamp } from 'three/src/math/MathUtils.js'
 import { config } from '../config'
+import { galleryShaders } from '../shaders'
 
 export interface GalleryItemOptions {
   color: THREE.Color
@@ -12,7 +13,7 @@ export class GalleryItem {
   private experience: Experience
 
   private geometry: THREE.PlaneGeometry
-  private material: THREE.MeshStandardMaterial
+  private material: THREE.ShaderMaterial
   private mesh: THREE.Mesh
   private wrapper: THREE.Group
 
@@ -24,16 +25,21 @@ export class GalleryItem {
     experience: Experience,
     { color, worldPosition }: GalleryItemOptions,
   ) {
+    const { deformation } = config.gallery
     this.experience = experience
 
-    this.geometry = new THREE.PlaneGeometry(3, 2)
-    this.material = new THREE.MeshStandardMaterial({
-      color,
+    this.geometry = new THREE.PlaneGeometry(3, 2, 32, 32)
+    this.material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
-      roughness: 0.5,
-      metalness: 0,
       transparent: true,
-      opacity: 1,
+      uniforms: {
+        u_color: { value: color },
+        u_opacity: { value: 1 },
+        u_velocity: { value: this.experience.scroll.normalizedVelocity },
+        u_strength: { value: deformation.strength },
+      },
+      vertexShader: galleryShaders.vertex,
+      fragmentShader: galleryShaders.fragment,
     })
     this.worldPosition = worldPosition
 
@@ -71,8 +77,12 @@ export class GalleryItem {
     this.updateResultZ()
   }
 
+  setVelocity(velocity: number) {
+    this.material.uniforms.u_velocity.value = velocity
+  }
+
   setOpacity(opacity: number) {
-    this.material.opacity = clamp(opacity, 0, 1)
+    this.material.uniforms.u_opacity.value = clamp(opacity, 0, 1)
   }
 
   update() {

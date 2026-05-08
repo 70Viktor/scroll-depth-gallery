@@ -70,6 +70,10 @@ export class Gallery {
         item.shiftRecycleCount(1)
       }
 
+      // deformation
+      const velocity = this.experience.scroll.normalizedVelocity
+      item.setVelocity(velocity)
+
       // fade
       const distanceToCamera = Math.abs(camera.position.z - item.resultZ)
       const opacity = inverseLerp(fade.from, fade.to, distanceToCamera)

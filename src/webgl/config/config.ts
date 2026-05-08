@@ -12,11 +12,16 @@ export const config = {
     ease: 0.04,
     speed: 0.25,
     toWorldFactor: 0.03,
+    maxVelocity: 2.5,
   },
   gallery: {
     gap: 5,
     count: data.length,
     recycleThreshold: 5,
+
+    deformation: {
+      strength: 0.5,
+    },
 
     get totalDepth(): number {
       return this.gap * this.count

@@ -20,15 +20,14 @@ export class Experience {
     this.canvas = canvas
 
     this.scene = new THREE.Scene()
-
     this.debug = new Debug()
+    this.scroll = new ScrollController(this)
+
     this.sizes = new Sizes()
     this.time = new Time()
     this.camera = new Camera(this)
     this.renderer = new Renderer(this)
     this.world = new World(this)
-
-    this.scroll = new ScrollController(this)
 
     this.sizes.onResize(() => this.resize())
     this.time.onTick(() => this.update())
