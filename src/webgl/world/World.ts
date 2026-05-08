@@ -23,7 +23,9 @@ export class World {
     this.experience.scene.add(this.axesHelper, this.gridHelper)
   }
 
-  update() {}
+  update() {
+    this.gallery.update()
+  }
 
   destroy() {
     this.environment.destroy()

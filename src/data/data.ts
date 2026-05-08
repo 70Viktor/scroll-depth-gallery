@@ -34,4 +34,4 @@ export const data: DataItem[] = [
     color: new THREE.Color('white'),
     offset: new THREE.Vector2(0, 0),
   },
-]
+] as const

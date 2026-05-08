@@ -1,27 +1,34 @@
 import * as THREE from 'three'
-import { Camera, Renderer, Sizes, Time } from './core'
+import { Camera, Debug, Renderer, Sizes, Time } from './core'
+import { ScrollController } from './scroll'
 import { World } from './world'
 
 export class Experience {
   canvas: HTMLCanvasElement
   scene: THREE.Scene
 
+  debug: Debug
   sizes: Sizes
   time: Time
   camera: Camera
   renderer: Renderer
   world: World
 
+  scroll: ScrollController
+
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
 
     this.scene = new THREE.Scene()
 
+    this.debug = new Debug()
     this.sizes = new Sizes()
     this.time = new Time()
     this.camera = new Camera(this)
     this.renderer = new Renderer(this)
     this.world = new World(this)
+
+    this.scroll = new ScrollController(this)
 
     this.sizes.onResize(() => this.resize())
     this.time.onTick(() => this.update())
@@ -33,14 +40,18 @@ export class Experience {
   }
 
   private update() {
+    this.scroll.update()
     this.camera.update()
+    this.world.update()
     this.renderer.update()
   }
 
   destroy() {
+    this.scroll.destroy()
     this.sizes.destroy()
     this.time.destroy()
     this.camera.destroy()
     this.renderer.destroy()
+    this.debug.destroy()
   }
 }
