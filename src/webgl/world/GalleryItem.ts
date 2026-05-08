@@ -6,6 +6,7 @@ import { galleryShaders } from '../shaders'
 
 export interface GalleryItemOptions {
   color: THREE.Color
+  bgColor: THREE.Color
   worldPosition: THREE.Vector3
 }
 
@@ -21,10 +22,10 @@ export class GalleryItem {
   private recycledCount = 0
   private scrollOffset = 0
 
-  constructor(
-    experience: Experience,
-    { color, worldPosition }: GalleryItemOptions,
-  ) {
+  bgColor: THREE.Color
+
+  constructor(experience: Experience, options: GalleryItemOptions) {
+    const { color, bgColor, worldPosition } = options
     const { deformation } = config.gallery
     this.experience = experience
 
@@ -42,6 +43,7 @@ export class GalleryItem {
       fragmentShader: galleryShaders.fragment,
     })
     this.worldPosition = worldPosition
+    this.bgColor = bgColor
 
     this.mesh = new THREE.Mesh(this.geometry, this.material)
     this.wrapper = new THREE.Group()

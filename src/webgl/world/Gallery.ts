@@ -18,12 +18,13 @@ export class Gallery {
   }
 
   private create() {
-    const { gap } = config.gallery
+    const { gap, startWorld } = config.gallery
 
     data.forEach((item, index) => {
       const options: GalleryItemOptions = {
         color: item.color,
-        worldPosition: vector2To3(item.offset, -index * gap),
+        bgColor: item.bgColor,
+        worldPosition: vector2To3(item.offset, startWorld - index * gap),
       }
 
       const galleryItem = new GalleryItem(this.experience, options)
@@ -61,6 +62,8 @@ export class Gallery {
     const { gallery, camera, fade } = config
 
     this.items.forEach((item) => {
+      item.update()
+
       // recycle
       while (item.resultZ > gallery.frontThreshold) {
         item.shiftRecycleCount(-1)
@@ -76,11 +79,43 @@ export class Gallery {
 
       // fade
       const distanceToCamera = Math.abs(camera.position.z - item.resultZ)
-      const opacity = inverseLerp(fade.from, fade.to, distanceToCamera)
+      const opacity = 1 - inverseLerp(fade.from, fade.to, distanceToCamera)
       item.setOpacity(opacity)
 
-      item.update()
+      // bg color
+      this.updateBgColor()
     })
+  }
+
+  private updateBgColor(): void {
+    const { startWorld } = config.gallery
+    let currentItem: GalleryItem | null = null
+    let nextItem: GalleryItem | null = null
+
+    for (const item of this.items) {
+      if (item.resultZ >= startWorld) {
+        if (!currentItem || item.resultZ < currentItem.resultZ) {
+          currentItem = item
+        }
+      }
+
+      if (item.resultZ < startWorld) {
+        if (!nextItem || item.resultZ > nextItem.resultZ) {
+          nextItem = item
+        }
+      }
+    }
+
+    if (!currentItem || !nextItem) return
+
+    const progress = inverseLerp(
+      currentItem.resultZ,
+      nextItem.resultZ,
+      startWorld,
+    )
+    const bgColor = currentItem.bgColor.clone().lerp(nextItem.bgColor, progress)
+
+    this.experience.scene.background = bgColor
   }
 
   destroy() {

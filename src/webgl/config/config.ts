@@ -17,7 +17,8 @@ export const config = {
   gallery: {
     gap: 5,
     count: data.length,
-    recycleThreshold: 5,
+    recycleThreshold: 7,
+    startWorld: 0,
 
     deformation: {
       strength: 0.5,
@@ -34,7 +35,7 @@ export const config = {
     },
   },
   fade: {
-    from: 0.5,
-    to: 3.5,
+    from: 3.5,
+    to: 0.5,
   },
 }
