@@ -8,6 +8,7 @@ export class PointerController {
 
   constructor() {
     window.addEventListener('pointermove', this.handlePointerMove)
+    window.addEventListener('pointerout', this.handlePointerOut)
   }
 
   private handlePointerMove = (event: PointerEvent) => {
@@ -16,6 +17,11 @@ export class PointerController {
 
     this.target.x = normalizedX * 2 - 1
     this.target.y = -(normalizedY * 2 - 1)
+  }
+
+  private handlePointerOut = () => {
+    this.target.x = 0
+    this.target.y = 0
   }
 
   update() {
@@ -33,5 +39,6 @@ export class PointerController {
 
   destroy() {
     window.removeEventListener('pointermove', this.handlePointerMove)
+    window.removeEventListener('pointerout', this.handlePointerOut)
   }
 }
