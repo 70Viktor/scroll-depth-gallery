@@ -9,6 +9,7 @@ export class ScrollController {
   velocity = 0
   normalizedVelocity = 0
   direction: 1 | -1 = 1
+  hasScrolled = false
 
   private experience: Experience
 
@@ -25,6 +26,8 @@ export class ScrollController {
 
     const { speed } = config.scroll
 
+    if (!this.hasScrolled) this.hasScrolled = true
+
     const delta = event.deltaY * speed
 
     this.target = roundTo(this.target + delta, 3)
@@ -36,7 +39,7 @@ export class ScrollController {
 
     const folder = this.experience.debug.gui!.addFolder('Scroll')
 
-    folder.add(config.scroll, 'ease').min(0.01).max(1).step(0.01)
+    folder.add(config.scroll, 'smooth').min(0.01).max(1).step(0.01)
     folder.add(config.scroll, 'speed').min(0.01).max(1).step(0.01)
     folder.add(config.scroll, 'toWorldFactor').min(0.001).max(0.1).step(0.001)
 
@@ -47,11 +50,11 @@ export class ScrollController {
   }
 
   update() {
-    const { ease, maxVelocity } = config.scroll
+    const { smooth, maxVelocity } = config.scroll
     const prev = this.current
 
     this.current = roundTo(
-      THREE.MathUtils.lerp(this.current, this.target, ease),
+      THREE.MathUtils.lerp(this.current, this.target, smooth),
       3,
     )
 

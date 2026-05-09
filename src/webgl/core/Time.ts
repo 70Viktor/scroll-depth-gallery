@@ -6,6 +6,10 @@ export class Time {
   elapsed: number
   delta: number
 
+  get elapsedSec(): number {
+    return this.elapsed / 1000
+  }
+
   private callbacks: TickCallback[] = []
   private rafId: number | null = null
 

@@ -6,18 +6,18 @@ export const config = {
     fov: 45,
     near: 0.5,
     far: 20,
-    position: new THREE.Vector3(0, 0, 5),
+    position: new THREE.Vector3(0, 0, 8),
   },
   scroll: {
-    ease: 0.04,
+    smooth: 0.04,
     speed: 0.25,
     toWorldFactor: 0.03,
     maxVelocity: 1.5,
   },
   gallery: {
-    gap: 5,
+    gap: 8,
     count: data.length,
-    recycleThreshold: 7,
+    recycleThreshold: 10,
     startWorld: 0,
 
     deformation: {
@@ -42,5 +42,12 @@ export const config = {
     smooth: 0.04,
     strengthX: 0.15,
     strengthY: 0.08,
+  },
+  breath: {
+    smoothIn: 0.03,
+    smoothOut: 0.04,
+    releaseDelay: 0,
+    velocityThreshold: 0.2,
+    velocityFactor: 0.15,
   },
 }

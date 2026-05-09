@@ -2,11 +2,13 @@ import type { Experience } from '@webgl'
 import * as THREE from 'three'
 import { config } from '../config'
 import { galleryShaders } from '../shaders'
+import type { Size } from '../utils'
 
 export interface GalleryItemOptions {
   color: THREE.Color
   bgColor: THREE.Color
   worldPosition: THREE.Vector3
+  size: Size
 }
 
 export class GalleryItem {
@@ -23,13 +25,14 @@ export class GalleryItem {
   private parallaxOffset = new THREE.Vector2()
 
   bgColor: THREE.Color
+  size: Size
 
   constructor(experience: Experience, options: GalleryItemOptions) {
-    const { color, bgColor, worldPosition } = options
+    const { color, bgColor, worldPosition, size } = options
     const { deformation } = config.gallery
     this.experience = experience
 
-    this.geometry = new THREE.PlaneGeometry(3, 2, 32, 32)
+    this.geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
     this.material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
       transparent: true,
@@ -44,8 +47,10 @@ export class GalleryItem {
     })
     this.worldPosition = worldPosition
     this.bgColor = bgColor
+    this.size = size
 
     this.mesh = new THREE.Mesh(this.geometry, this.material)
+    this.mesh.scale.set(size.width, size.height, 1)
     this.wrapper = new THREE.Group()
     this.wrapper.position.copy(this.worldPosition)
 
@@ -75,6 +80,10 @@ export class GalleryItem {
       0,
       1,
     )
+  }
+
+  setScale(scale: number) {
+    this.mesh.scale.set(this.size.width * scale, this.size.height * scale, 1)
   }
 
   update() {

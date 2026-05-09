@@ -1,6 +1,7 @@
 import { data } from '@data'
 import type { Experience } from '@webgl'
 import * as THREE from 'three'
+import { Breath } from '../animations'
 import { config } from '../config'
 import { vector2To3 } from '../utils'
 import { GalleryItem, type GalleryItemOptions } from './GalleryItem'
@@ -10,10 +11,15 @@ export class Gallery {
 
   private items: GalleryItem[] = []
 
+  private breath: Breath
+
   constructor(experience: Experience) {
     this.experience = experience
 
     this.create()
+
+    this.breath = new Breath(this.experience)
+
     this.setupDebug()
   }
 
@@ -24,6 +30,7 @@ export class Gallery {
       const options: GalleryItemOptions = {
         color: item.color,
         bgColor: item.bgColor,
+        size: item.size,
         worldPosition: vector2To3(item.offset, startWorld - index * gap),
       }
 
@@ -84,10 +91,16 @@ export class Gallery {
       const opacity =
         1 - THREE.MathUtils.inverseLerp(fade.from, fade.to, distanceToCamera)
       item.setOpacity(opacity)
-
-      // bg color
-      this.updateBgColor()
     })
+
+    this.updateBgColor()
+    this.updateBreath()
+  }
+
+  private updateBreath() {
+    const scale = this.breath.update()
+
+    this.items.forEach((item) => item.setScale(scale))
   }
 
   private updateBgColor(): void {
