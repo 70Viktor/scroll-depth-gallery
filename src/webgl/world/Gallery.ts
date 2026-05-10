@@ -10,6 +10,7 @@ export class Gallery {
   private experience: Experience
 
   private items: GalleryItem[] = []
+  activeIndex = 0
 
   private breath: Breath
 
@@ -29,7 +30,6 @@ export class Gallery {
     data.forEach((item, index) => {
       const options: GalleryItemOptions = {
         color: item.color,
-        bgColor: item.bgColor,
         size: item.size,
         worldPosition: vector2To3(item.offset, startWorld - index * gap),
       }
@@ -67,6 +67,7 @@ export class Gallery {
 
   update() {
     const { gallery, camera, fade } = config
+    const scale = this.breath.update()
 
     this.items.forEach((item) => {
       item.update()
@@ -76,7 +77,6 @@ export class Gallery {
         item.shiftRecycleCount(-1)
         item.update()
       }
-
       while (item.resultZ < gallery.backThreshold) {
         item.shiftRecycleCount(1)
         item.update()
@@ -91,47 +91,30 @@ export class Gallery {
       const opacity =
         1 - THREE.MathUtils.inverseLerp(fade.from, fade.to, distanceToCamera)
       item.setOpacity(opacity)
+
+      // breath
+      item.setScale(scale)
     })
 
-    this.updateBgColor()
-    this.updateBreath()
+    this.updateActiveIndex()
   }
 
-  private updateBreath() {
-    const scale = this.breath.update()
-
-    this.items.forEach((item) => item.setScale(scale))
-  }
-
-  private updateBgColor(): void {
+  private updateActiveIndex() {
     const { startWorld } = config.gallery
-    let currentItem: GalleryItem | null = null
-    let nextItem: GalleryItem | null = null
+
+    let activeItem: GalleryItem | null = null
 
     for (const item of this.items) {
       if (item.resultZ >= startWorld) {
-        if (!currentItem || item.resultZ < currentItem.resultZ) {
-          currentItem = item
-        }
-      }
-
-      if (item.resultZ < startWorld) {
-        if (!nextItem || item.resultZ > nextItem.resultZ) {
-          nextItem = item
+        if (!activeItem || item.resultZ < activeItem.resultZ) {
+          activeItem = item
         }
       }
     }
 
-    if (!currentItem || !nextItem) return
+    if (!activeItem) return
 
-    const progress = THREE.MathUtils.inverseLerp(
-      currentItem.resultZ,
-      nextItem.resultZ,
-      startWorld,
-    )
-    const bgColor = currentItem.bgColor.clone().lerp(nextItem.bgColor, progress)
-
-    this.experience.scene.background = bgColor
+    this.activeIndex = this.items.indexOf(activeItem)
   }
 
   destroy() {

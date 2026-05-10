@@ -1,3 +1,5 @@
 export * from './roundTo'
 export * from './size'
+export * from './SmoothColor'
+export * from './SmoothValue'
 export * from './vector2To3'

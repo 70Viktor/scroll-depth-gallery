@@ -5,8 +5,7 @@ import { galleryShaders } from '../shaders'
 import type { Size } from '../utils'
 
 export interface GalleryItemOptions {
-  color: THREE.Color
-  bgColor: THREE.Color
+  color: THREE.ColorRepresentation
   worldPosition: THREE.Vector3
   size: Size
 }
@@ -24,11 +23,10 @@ export class GalleryItem {
   private scrollOffset = 0
   private parallaxOffset = new THREE.Vector2()
 
-  bgColor: THREE.Color
   size: Size
 
   constructor(experience: Experience, options: GalleryItemOptions) {
-    const { color, bgColor, worldPosition, size } = options
+    const { color, worldPosition, size } = options
     const { deformation } = config.gallery
     this.experience = experience
 
@@ -37,7 +35,7 @@ export class GalleryItem {
       side: THREE.DoubleSide,
       transparent: true,
       uniforms: {
-        u_color: { value: color },
+        u_color: { value: new THREE.Color(color) },
         u_opacity: { value: 1 },
         u_velocity: { value: this.experience.scroll.normalizedVelocity },
         u_strength: { value: deformation.strength },
@@ -46,7 +44,6 @@ export class GalleryItem {
       fragmentShader: galleryShaders.fragment,
     })
     this.worldPosition = worldPosition
-    this.bgColor = bgColor
     this.size = size
 
     this.mesh = new THREE.Mesh(this.geometry, this.material)
