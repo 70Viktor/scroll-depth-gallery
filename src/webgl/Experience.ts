@@ -40,6 +40,7 @@ export class Experience {
   private resize() {
     this.camera.resize()
     this.renderer.resize()
+    this.world.resize()
   }
 
   private update() {

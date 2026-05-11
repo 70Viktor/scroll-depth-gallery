@@ -40,10 +40,11 @@ export class Background {
       depthTest: false,
       uniforms: {
         u_color: { value: this.bgColor.value },
-        u_blobColor: { value: this.blob1Color.value },
+        u_blob1Color: { value: this.blob1Color.value },
+        u_blob2Color: { value: this.blob2Color.value },
         u_blobRadius: { value: config.bg.blobRadius },
         u_blobBlurRadius: { value: config.bg.blobBlurRadius },
-        u_resolution: { value: this.experience.sizes.size },
+        u_resolution: { value: this.experience.sizes.resolution },
         u_time: { value: this.experience.time.elapsed },
         u_noiseStrength: { value: 0.05 },
         u_breath: {
@@ -69,19 +70,22 @@ export class Background {
 
     this.activeIndex = index
 
-    const { bgColor, blob1Color } = data[this.activeIndex]
+    const { bgColor, blob1Color, blob2Color } = data[this.activeIndex]
 
     this.bgColor.value = bgColor
     this.blob1Color.value = blob1Color
+    this.blob2Color.value = blob2Color
   }
 
   resize() {
-    this.bgMaterial.uniforms.u_resolution.value = this.experience.sizes.size
+    this.bgMaterial.uniforms.u_resolution.value =
+      this.experience.sizes.resolution
   }
 
   update() {
     this.bgColor.update()
     this.blob1Color.update()
+    this.blob2Color.update()
 
     this.bgMaterial.uniforms.u_time.value = this.experience.time.elapsed
 

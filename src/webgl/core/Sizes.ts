@@ -14,6 +14,10 @@ export class Sizes {
     return width / height
   }
 
+  get resolution() {
+    return this.size.multiplyScalar(this.pixelRatio)
+  }
+
   private callbacks: ResizeCallback[] = []
 
   constructor() {

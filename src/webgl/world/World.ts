@@ -26,6 +26,10 @@ export class World {
     this.experience.scene.add(this.axesHelper, this.gridHelper)
   }
 
+  resize() {
+    this.background.resize()
+  }
+
   update() {
     this.gallery.update()
 
