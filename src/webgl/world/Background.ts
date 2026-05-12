@@ -19,17 +19,17 @@ export class Background {
   private breathTarget = 0
 
   private bgColor: SmoothColor
-  private blob1Color: SmoothColor
-  private blob2Color: SmoothColor
+  private bgDarkColor: SmoothColor
+  private bgLightColor: SmoothColor
 
   constructor(experience: Experience) {
     this.experience = experience
-    const { bgColor, blob1Color, blob2Color } = data[this.activeIndex]
+    const { bgDarkColor, bgColor, bgLightColor } = data[this.activeIndex]
     const { smooth } = config.bg
 
     this.bgColor = new SmoothColor(bgColor, smooth)
-    this.blob1Color = new SmoothColor(blob1Color, smooth)
-    this.blob2Color = new SmoothColor(blob2Color, smooth)
+    this.bgDarkColor = new SmoothColor(bgDarkColor, smooth)
+    this.bgLightColor = new SmoothColor(bgLightColor, smooth)
 
     this.scene = new THREE.Scene()
     this.camera = new THREE.OrthographicCamera()
@@ -40,16 +40,12 @@ export class Background {
       depthTest: false,
       uniforms: {
         u_color: { value: this.bgColor.value },
-        u_blob1Color: { value: this.blob1Color.value },
-        u_blob2Color: { value: this.blob2Color.value },
-        u_blobRadius: { value: config.bg.blobRadius },
-        u_blobBlurRadius: { value: config.bg.blobBlurRadius },
+        u_darkColor: { value: this.bgDarkColor.value },
+        u_lightColor: { value: this.bgLightColor.value },
         u_resolution: { value: this.experience.sizes.resolution },
         u_time: { value: this.experience.time.elapsed },
         u_noiseStrength: { value: 0.05 },
-        u_breath: {
-          value: this.breathCurrent,
-        },
+        u_breath: { value: this.breathCurrent },
       },
       fragmentShader: backgroundShaders.fragment,
       vertexShader: backgroundShaders.vertex,
@@ -70,11 +66,11 @@ export class Background {
 
     this.activeIndex = index
 
-    const { bgColor, blob1Color, blob2Color } = data[this.activeIndex]
+    const { bgDarkColor, bgColor, bgLightColor } = data[this.activeIndex]
 
+    this.bgDarkColor.value = bgDarkColor
     this.bgColor.value = bgColor
-    this.blob1Color.value = blob1Color
-    this.blob2Color.value = blob2Color
+    this.bgLightColor.value = bgLightColor
   }
 
   resize() {
@@ -83,9 +79,9 @@ export class Background {
   }
 
   update() {
+    this.bgDarkColor.update()
     this.bgColor.update()
-    this.blob1Color.update()
-    this.blob2Color.update()
+    this.bgLightColor.update()
 
     this.bgMaterial.uniforms.u_time.value = this.experience.time.elapsed
 

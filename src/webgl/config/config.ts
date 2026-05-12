@@ -52,8 +52,6 @@ export const config = {
   },
   bg: {
     smooth: 0.01,
-    blobRadius: 0.4,
-    blobBlurRadius: 0.6,
     breathSmooth: 0.04,
     breathStrength: 0.2,
   },
