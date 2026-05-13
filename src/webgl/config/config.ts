@@ -6,12 +6,12 @@ export const config = {
     fov: 45,
     near: 1,
     far: 30,
-    position: new THREE.Vector3(0, 0, 10),
+    position: new THREE.Vector3(0, 0, 8),
   },
   scroll: {
     smooth: 0.04,
     speed: 0.25,
-    toWorldFactor: 0.03,
+    toWorldFactor: 0.045,
     maxVelocity: 1.5,
   },
   gallery: {
@@ -35,8 +35,8 @@ export const config = {
     },
   },
   fade: {
-    from: 6,
-    to: 2,
+    from: 3.5,
+    to: 1,
   },
   parallax: {
     smooth: 0.04,
@@ -53,6 +53,6 @@ export const config = {
   bg: {
     smooth: 0.01,
     breathSmooth: 0.04,
-    breathStrength: 0.2,
+    breathStrength: 0.05,
   },
 }

@@ -3,7 +3,7 @@ import type { Experience } from '@webgl'
 import * as THREE from 'three'
 import { Breath } from '../animations'
 import { config } from '../config'
-import { vector2To3 } from '../utils'
+import { vector2To3, type Size } from '../utils'
 import { GalleryItem, type GalleryItemOptions } from './GalleryItem'
 
 export class Gallery {
@@ -28,9 +28,17 @@ export class Gallery {
     const { gap, startWorld } = config.gallery
 
     data.forEach((item, index) => {
+      const texture = this.experience.resources.getTexture(index)
+      const aspect = texture.width / texture.height
+
+      const size: Size = {
+        width: item.width,
+        height: item.width / aspect,
+      }
+
       const options: GalleryItemOptions = {
-        color: item.color,
-        size: item.size,
+        texture,
+        size,
         worldPosition: vector2To3(item.offset, startWorld - index * gap),
       }
 

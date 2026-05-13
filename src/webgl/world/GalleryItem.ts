@@ -5,7 +5,7 @@ import { galleryShaders } from '../shaders'
 import type { Size } from '../utils'
 
 export interface GalleryItemOptions {
-  color: THREE.ColorRepresentation
+  texture: THREE.Texture
   worldPosition: THREE.Vector3
   size: Size
 }
@@ -26,7 +26,7 @@ export class GalleryItem {
   size: Size
 
   constructor(experience: Experience, options: GalleryItemOptions) {
-    const { color, worldPosition, size } = options
+    const { texture, worldPosition, size } = options
     const { deformation } = config.gallery
     this.experience = experience
 
@@ -35,7 +35,7 @@ export class GalleryItem {
       side: THREE.DoubleSide,
       transparent: true,
       uniforms: {
-        u_color: { value: new THREE.Color(color) },
+        u_texture: { value: texture },
         u_opacity: { value: 1 },
         u_velocity: { value: this.experience.scroll.normalizedVelocity },
         u_strength: { value: deformation.strength },

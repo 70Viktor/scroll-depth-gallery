@@ -1,5 +1,6 @@
 export * from './Camera'
 export * from './Debug'
 export * from './Renderer'
+export * from './Resources'
 export * from './Sizes'
 export * from './Time'
