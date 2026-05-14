@@ -30,18 +30,13 @@ export class Gallery {
     data.forEach((item, index) => {
       const texture = this.experience.resources.getTexture(index)
       const aspect = texture.width / texture.height
-
       const size: Size = {
         width: item.width,
         height: item.width / aspect,
       }
+      const worldPosition = vector2To3(item.offset, startWorld - index * gap)
 
-      const options: GalleryItemOptions = {
-        texture,
-        size,
-        worldPosition: vector2To3(item.offset, startWorld - index * gap),
-      }
-
+      const options: GalleryItemOptions = { texture, size, worldPosition }
       const galleryItem = new GalleryItem(this.experience, options)
 
       this.items.push(galleryItem)

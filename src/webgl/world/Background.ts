@@ -24,7 +24,7 @@ export class Background {
 
   constructor(experience: Experience) {
     this.experience = experience
-    const { bgDarkColor, bgColor, bgLightColor } = data[this.activeIndex]
+    const { bgColor, bgDarkColor, bgLightColor } = data[this.activeIndex]
     const { smooth } = config.bg
 
     this.bgColor = new SmoothColor(bgColor, smooth)

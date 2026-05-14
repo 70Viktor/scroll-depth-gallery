@@ -1,3 +1,4 @@
+export * from './createBgPalette'
 export * from './roundTo'
 export * from './size'
 export * from './SmoothColor'
