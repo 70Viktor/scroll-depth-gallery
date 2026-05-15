@@ -3,12 +3,14 @@ import type { Experience } from '../Experience'
 import { Background } from './Background'
 import { Environment } from './Environment'
 import { Gallery } from './Gallery'
+import { Title } from './Title'
 
 export class World {
   private experience: Experience
   private environment: Environment
   private background: Background
   private gallery: Gallery
+  private title: Title
 
   private axesHelper: THREE.AxesHelper
   private gridHelper: THREE.GridHelper
@@ -19,6 +21,7 @@ export class World {
     this.environment = new Environment(this.experience)
     this.background = new Background(this.experience)
     this.gallery = new Gallery(this.experience)
+    this.title = new Title()
 
     this.axesHelper = new THREE.AxesHelper(5)
     this.gridHelper = new THREE.GridHelper(20, 20)
@@ -33,8 +36,12 @@ export class World {
   update() {
     this.gallery.update()
 
-    this.background.setActiveIndex(this.gallery.activeIndex)
+    const { activeIndex } = this.gallery
+
+    this.background.setActiveIndex(activeIndex)
     this.background.update()
+
+    this.title.setActiveIndex(activeIndex)
   }
 
   destroy() {
