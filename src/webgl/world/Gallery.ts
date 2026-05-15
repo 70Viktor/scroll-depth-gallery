@@ -103,12 +103,12 @@ export class Gallery {
   }
 
   private updateActiveIndex() {
-    const { startWorld } = config.gallery
+    const { activeZ } = config.gallery
 
     let activeItem: GalleryItem | null = null
 
     for (const item of this.items) {
-      if (item.resultZ >= startWorld) {
+      if (item.resultZ >= activeZ) {
         if (!activeItem || item.resultZ < activeItem.resultZ) {
           activeItem = item
         }

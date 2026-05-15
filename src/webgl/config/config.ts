@@ -4,9 +4,9 @@ import * as THREE from 'three'
 export const config = {
   camera: {
     fov: 45,
-    near: 1,
+    near: 0.5,
     far: 30,
-    position: new THREE.Vector3(0, 0, 8),
+    position: new THREE.Vector3(0, 0, 10),
   },
   scroll: {
     smooth: 0.04,
@@ -17,8 +17,9 @@ export const config = {
   gallery: {
     gap: 8,
     count: data.length,
-    recycleThreshold: 8,
+    recycleThreshold: 12,
     startWorld: 0,
+    activeZ: -1.5,
 
     deformation: {
       strength: 0.5,
@@ -35,8 +36,8 @@ export const config = {
     },
   },
   fade: {
-    from: 3.5,
-    to: 1,
+    from: 5,
+    to: 2,
   },
   parallax: {
     smooth: 0.04,
@@ -53,6 +54,6 @@ export const config = {
   bg: {
     smooth: 0.01,
     breathSmooth: 0.04,
-    breathStrength: 0.05,
+    breathStrength: 0.1,
   },
 }
