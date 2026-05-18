@@ -11,9 +11,11 @@ body {
   touch-action: none;
 }
 
-@font-face {
-  font-family: 'Shantell Sans';
-  src: url(./assets/fonts/ShantellSans-MediumItalic.woff2) format('woff2');
+:root {
+  --text-color: '#FFFFFF';
+  font-family: 'Roboto', monospace, sans-serif;
+  font-size: 16px;
+  color: var(--text-color);
 }
 
 .webgl {
@@ -29,24 +31,52 @@ body {
   width: 100%;
   height: 100%;
   z-index: 1;
+  pointer-events: none;
 }
 
-.ui-info {
+.ui__info {
   position: absolute;
-  bottom: 0;
-  width: 100%;
+  bottom: 15rem;
+  right: 4rem;
+}
+
+.info {
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
-  justify-content: space-between;
-  padding: 2rem;
+  gap: 0.4rem;
+}
+
+.info__year,
+.info__title {
+  font-size: 1.2rem;
+  line-height: 1;
+  font-weight: 500;
+  margin: 0;
+}
+
+.year__digit-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 1ch;
+  height: 1em;
+  font-size: 1.4rem;
+  font-family: 'Xanh Mono', monospace;
+  pointer-events: auto;
+}
+
+.year__digit-item {
+  position: absolute;
+  inset: 0;
+  display: block;
+  line-height: 1;
 }
 
 .title {
   position: relative;
-  overflow: hidden;
-  text-align: end;
-  height: 3.6rem;
-  width: 100%;
+  height: 2rem;
+  text-align: center;
+  pointer-events: auto;
 }
 
 .title__item-mask {
@@ -59,11 +89,9 @@ body {
 
 .title__item {
   display: block;
-  font-size: 3rem;
-  line-height: 3.6rem;
+  font-size: 2rem;
+  line-height: 1;
   white-space: nowrap;
-  font-family: 'Shantell Sans';
-  font-weight: 600;
   transform-origin: center;
   will-change: transfrom;
 }

@@ -1,4 +1,5 @@
 export * from './createBgPalette'
+export * from './getColorLuminance'
 export * from './roundTo'
 export * from './size'
 export * from './SmoothColor'
