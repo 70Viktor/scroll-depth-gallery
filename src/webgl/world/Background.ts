@@ -1,9 +1,9 @@
 import { data } from '@data'
+import { SmoothColor } from '@utils'
 import type { Experience } from '@webgl'
 import * as THREE from 'three'
 import { config } from '../config'
 import { backgroundShaders } from '../shaders'
-import { SmoothColor } from '../utils'
 
 export class Background {
   private experience: Experience

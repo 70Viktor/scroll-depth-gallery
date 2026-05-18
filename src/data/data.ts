@@ -1,6 +1,6 @@
 import { images } from '@assets'
+import { createBgPalette } from '@utils'
 import * as THREE from 'three'
-import { createBgPalette } from '../webgl/utils'
 
 interface DataItem {
   src: string

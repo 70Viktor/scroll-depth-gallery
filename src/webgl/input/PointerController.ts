@@ -1,6 +1,6 @@
+import { roundTo } from '@utils'
 import * as THREE from 'three'
 import { config } from '../config'
-import { roundTo } from '../utils'
 
 export class PointerController {
   target = new THREE.Vector2()

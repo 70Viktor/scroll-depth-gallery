@@ -1,9 +1,9 @@
+import { GalleryInfo } from '@ui'
 import * as THREE from 'three'
 import type { Experience } from '../Experience'
 import { Background } from './Background'
 import { Environment } from './Environment'
 import { Gallery } from './Gallery'
-import { GalleryInfo } from './GalleryInfo'
 
 export class World {
   private experience: Experience

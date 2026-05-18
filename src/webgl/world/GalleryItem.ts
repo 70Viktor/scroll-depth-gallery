@@ -1,8 +1,8 @@
+import type { Size } from '@utils'
 import type { Experience } from '@webgl'
 import * as THREE from 'three'
 import { config } from '../config'
 import { galleryShaders } from '../shaders'
-import type { Size } from '../utils'
 
 export interface GalleryItemOptions {
   texture: THREE.Texture

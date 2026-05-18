@@ -1,7 +1,7 @@
+import { roundTo } from '@utils'
 import type { Experience } from '@webgl'
 import * as THREE from 'three'
 import { config } from '../config'
-import { roundTo } from '../utils'
 
 export class ScrollController {
   current = 0

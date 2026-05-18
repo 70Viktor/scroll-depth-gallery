@@ -1,6 +1,6 @@
 import { data } from '@data'
+import { getColorLuminance } from '@utils'
 import gsap from 'gsap'
-import { getColorLuminance } from '../utils'
 
 export class GalleryInfo {
   private activeIndex = -1

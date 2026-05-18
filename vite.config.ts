@@ -8,6 +8,8 @@ export default defineConfig({
       '@assets': '/src/assets',
       '@webgl': '/src/webgl',
       '@data': '/src/data',
+      '@utils': '/src/utils',
+      '@ui': '/src/ui',
     },
   },
 })
