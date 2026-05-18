@@ -20,8 +20,6 @@ export class Gallery {
     this.create()
 
     this.breath = new Breath(this.experience)
-
-    this.setupDebug()
   }
 
   private create() {
@@ -41,22 +39,6 @@ export class Gallery {
 
       this.items.push(galleryItem)
     })
-  }
-
-  private setupDebug() {
-    if (!this.experience.debug.enabled) return
-
-    const folder = this.experience.debug.gui!.addFolder('Gallery')
-
-    folder
-      .add(config.gallery, 'gap')
-      .min(0.1)
-      .max(10)
-      .step(0.1)
-      .onChange(() => this.updateLayout())
-    folder.add(config.gallery, 'recycleThreshold').min(0.1).max(10).step(0.1)
-
-    folder.add(config.gallery, 'totalDepth').listen()
   }
 
   updateLayout() {

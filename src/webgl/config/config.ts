@@ -6,7 +6,7 @@ export const config = {
     fov: 45,
     near: 0.5,
     far: 30,
-    position: new THREE.Vector3(0, 0, 10),
+    position: new THREE.Vector3(0, 0, 8),
   },
   scroll: {
     smooth: 0.04,
@@ -19,10 +19,10 @@ export const config = {
     count: data.length,
     recycleThreshold: 12,
     startWorld: 0,
-    activeZ: -1.5,
+    activeZ: -2.5,
 
     deformation: {
-      strength: 0.5,
+      strength: 0.3,
     },
 
     get totalDepth(): number {

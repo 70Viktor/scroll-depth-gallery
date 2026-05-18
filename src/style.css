@@ -45,6 +45,7 @@ body {
   flex-direction: column;
   align-items: flex-end;
   gap: 0.4rem;
+  pointer-events: auto;
 }
 
 .info__year,

@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Camera, Debug, Renderer, Resources, Sizes, Time } from './core'
+import { Camera, Renderer, Resources, Sizes, Time } from './core'
 import { PointerController, ScrollController } from './input'
 import { World } from './world'
 
@@ -8,7 +8,6 @@ export class Experience {
   scene: THREE.Scene
   sizes: Sizes
   time: Time
-  debug: Debug
 
   scroll: ScrollController
   pointer: PointerController
@@ -23,9 +22,8 @@ export class Experience {
     this.scene = new THREE.Scene()
     this.sizes = new Sizes()
     this.time = new Time()
-    this.debug = new Debug()
 
-    this.scroll = new ScrollController(this)
+    this.scroll = new ScrollController()
     this.pointer = new PointerController()
 
     this.camera = new Camera(this)
@@ -46,7 +44,6 @@ export class Experience {
   private update() {
     this.pointer.update()
     this.scroll.update()
-    this.camera.update()
     this.world.update()
     this.renderer.update()
   }
@@ -59,6 +56,5 @@ export class Experience {
     this.camera.destroy()
     this.renderer.destroy()
     this.resources.destroy()
-    this.debug.destroy()
   }
 }

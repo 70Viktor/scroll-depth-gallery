@@ -1,5 +1,4 @@
 import { roundTo } from '@utils'
-import type { Experience } from '@webgl'
 import * as THREE from 'three'
 import { config } from '../config'
 
@@ -11,14 +10,8 @@ export class ScrollController {
   direction: 1 | -1 = 1
   hasScrolled = false
 
-  private experience: Experience
-
-  constructor(experience: Experience) {
-    this.experience = experience
-
+  constructor() {
     window.addEventListener('wheel', this.handleWheel, { passive: false })
-
-    this.setupDebug()
   }
 
   private handleWheel = (event: WheelEvent) => {
@@ -32,21 +25,6 @@ export class ScrollController {
 
     this.target = roundTo(this.target + delta, 3)
     this.direction = delta > 0 ? 1 : -1
-  }
-
-  private setupDebug() {
-    if (!this.experience.debug.enabled) return
-
-    const folder = this.experience.debug.gui!.addFolder('Scroll')
-
-    folder.add(config.scroll, 'smooth').min(0.01).max(1).step(0.01)
-    folder.add(config.scroll, 'speed').min(0.01).max(1).step(0.01)
-    folder.add(config.scroll, 'toWorldFactor').min(0.001).max(0.1).step(0.001)
-
-    folder.add(this, 'current').listen()
-    folder.add(this, 'target').listen()
-    folder.add(this, 'velocity').listen()
-    folder.add(this, 'direction').listen()
   }
 
   update() {

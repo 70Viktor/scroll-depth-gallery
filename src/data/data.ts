@@ -16,7 +16,7 @@ interface DataItem {
 export const data: DataItem[] = [
   {
     src: images[1],
-    offset: new THREE.Vector2(0.8, 0),
+    offset: new THREE.Vector2(1, 0),
     width: 3,
     title: 'Мое родное село',
     year: 2012,
@@ -24,7 +24,7 @@ export const data: DataItem[] = [
   },
   {
     src: images[2],
-    offset: new THREE.Vector2(-0.8, 0),
+    offset: new THREE.Vector2(-1, 0),
     width: 3,
     title: 'Золотые купола',
     year: 2012,
@@ -32,7 +32,7 @@ export const data: DataItem[] = [
   },
   {
     src: images[3],
-    offset: new THREE.Vector2(0.8, 0),
+    offset: new THREE.Vector2(1, 0),
     width: 3,
     title: 'Осенний листопад',
     year: 2013,
@@ -40,7 +40,7 @@ export const data: DataItem[] = [
   },
   {
     src: images[4],
-    offset: new THREE.Vector2(-0.8, 0),
+    offset: new THREE.Vector2(-1, 0),
     width: 3,
     title: 'Сибирь. Тайга.',
     year: 2017,
@@ -48,7 +48,7 @@ export const data: DataItem[] = [
   },
   {
     src: images[5],
-    offset: new THREE.Vector2(0.8, 0),
+    offset: new THREE.Vector2(1, 0),
     width: 3,
     title: 'Весенние заморозки',
     year: 2017,
@@ -56,7 +56,7 @@ export const data: DataItem[] = [
   },
   {
     src: images[6],
-    offset: new THREE.Vector2(-0.8, 0),
+    offset: new THREE.Vector2(-1, 0),
     width: 3,
     title: 'В зимнем парке',
     year: 2017,
@@ -64,7 +64,7 @@ export const data: DataItem[] = [
   },
   {
     src: images[7],
-    offset: new THREE.Vector2(0.8, 0),
+    offset: new THREE.Vector2(1, 0),
     width: 3,
     title: 'Лесная река',
     year: 2015,
@@ -72,7 +72,7 @@ export const data: DataItem[] = [
   },
   {
     src: images[8],
-    offset: new THREE.Vector2(-0.8, 0),
+    offset: new THREE.Vector2(-1, 0),
     width: 3,
     title: 'Большая вода',
     year: 2013,
