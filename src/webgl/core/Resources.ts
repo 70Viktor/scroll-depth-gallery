@@ -1,34 +1,65 @@
 import { data } from '@data'
 import * as THREE from 'three'
 
+type ProgressCallback = (progress: number) => void
+type LoadCallback = () => void
+
 export class Resources {
+  textures: THREE.Texture[] = []
+
+  progress = 0
+  loaded = 0
+  total = 0
+
   private textureLoader = new THREE.TextureLoader()
 
-  textures: THREE.Texture[] = []
-  isLoaded = false
+  private progressCallbacks = new Set<ProgressCallback>()
+  private loadCallbacks = new Set<LoadCallback>()
 
   async load() {
     const promises = data.map(({ src }) => {
       return this.loadTexture(src)
     })
 
+    this.total = promises.length
+
     this.textures = await Promise.all(promises)
-    this.isLoaded = true
+
+    this.emitLoad()
+  }
+
+  onProgress(callback: ProgressCallback) {
+    this.progressCallbacks.add(callback)
+  }
+
+  onLoad(callback: LoadCallback) {
+    this.loadCallbacks.add(callback)
+  }
+
+  private emitProgress() {
+    console.log(this.progress)
+    this.progressCallbacks.forEach((callback) => callback(this.progress))
+  }
+
+  private emitLoad() {
+    this.loadCallbacks.forEach((callback) => callback())
   }
 
   private loadTexture(src: string): Promise<THREE.Texture> {
     return new Promise((resolve, reject) => {
       const onLoad = (texture: THREE.Texture) => {
+        this.loaded += 1
+        this.progress = this.loaded / this.total
+
+        this.emitProgress()
+
         resolve(texture)
-      }
-      const onProgress = (event: ProgressEvent) => {
-        console.log(event)
       }
       const onError = (err: unknown) => {
         reject(err)
       }
 
-      this.textureLoader.load(src, onLoad, onProgress, onError)
+      this.textureLoader.load(src, onLoad, undefined, onError)
     })
   }
 

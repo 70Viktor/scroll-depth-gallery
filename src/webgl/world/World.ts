@@ -1,5 +1,4 @@
-import { GalleryInfo } from '@ui'
-import * as THREE from 'three'
+import { GalleryInfo, Preloader } from '@ui'
 import type { Experience } from '../Experience'
 import { Background } from './Background'
 import { Environment } from './Environment'
@@ -9,24 +8,30 @@ export class World {
   private experience: Experience
   private environment: Environment
   private background: Background
-  private gallery: Gallery
+  private gallery: Gallery | null = null
   private info: GalleryInfo
-
-  private axesHelper: THREE.AxesHelper
-  private gridHelper: THREE.GridHelper
+  private preloader: Preloader
 
   constructor(experience: Experience) {
     this.experience = experience
 
     this.environment = new Environment(this.experience)
     this.background = new Background(this.experience)
-    this.gallery = new Gallery(this.experience)
     this.info = new GalleryInfo()
+    this.preloader = new Preloader(this.experience)
 
-    this.axesHelper = new THREE.AxesHelper(5)
-    this.gridHelper = new THREE.GridHelper(20, 20)
+    this.init()
+  }
 
-    this.experience.scene.add(this.axesHelper, this.gridHelper)
+  private async init() {
+    const { resources } = this.experience
+
+    resources.onProgress(this.preloader.setProgress)
+    resources.onLoad(this.preloader.hide)
+
+    await resources.load()
+
+    this.gallery = new Gallery(this.experience)
   }
 
   resize() {
@@ -34,6 +39,8 @@ export class World {
   }
 
   update() {
+    if (!this.gallery) return
+
     this.gallery.update()
 
     const { activeIndex } = this.gallery
@@ -47,6 +54,6 @@ export class World {
   destroy() {
     this.environment.destroy()
     this.background.destroy()
-    this.gallery.destroy()
+    this.gallery?.destroy()
   }
 }

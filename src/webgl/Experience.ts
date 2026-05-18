@@ -16,7 +16,7 @@ export class Experience {
   camera: Camera
   renderer: Renderer
   resources: Resources
-  world: World | null = null
+  world: World
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
@@ -31,30 +31,23 @@ export class Experience {
     this.camera = new Camera(this)
     this.renderer = new Renderer(this)
     this.resources = new Resources()
+    this.world = new World(this)
 
     this.sizes.onResize(() => this.resize())
     this.time.onTick(() => this.update())
-
-    this.init()
-  }
-
-  private async init() {
-    await this.resources.load()
-
-    this.world = new World(this)
   }
 
   private resize() {
     this.camera.resize()
     this.renderer.resize()
-    this.world?.resize()
+    this.world.resize()
   }
 
   private update() {
     this.pointer.update()
     this.scroll.update()
     this.camera.update()
-    this.world?.update()
+    this.world.update()
     this.renderer.update()
   }
 

@@ -15,6 +15,45 @@
           <h2 class="info__title">Название картины</h2>
         </div>
       </div>
+      <style>
+        .preloader {
+          position: fixed;
+          inset: 0;
+          z-index: 100;
+          background: #c8af9e;
+          display: grid;
+          place-items: center;
+          cursor: wait;
+        }
+
+        .preloader__columns {
+          position: absolute;
+          z-index: 0;
+          inset: 0;
+          display: flex;
+        }
+
+        .preloader__column {
+          flex-grow: 1;
+          background: #c8af9e;
+          clip-path: inset(0% 0% 0% 0%);
+          will-change: clip-path;
+        }
+
+        .preloader__counter {
+          position: absolute;
+          z-index: 1;
+          color: #000000;
+          font-family: 'Roboto', monospace, sans-serif;
+          font-size: 4rem;
+          font-weight: 400;
+          font-variant-numeric: tabular-nums;
+        }
+      </style>
+      <div class="preloader">
+        <div class="preloader__columns"></div>
+        <p class="preloader__counter">0</p>
+      </div>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
