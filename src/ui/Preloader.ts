@@ -7,6 +7,7 @@ export class Preloader {
   private counter: HTMLElement
   private columns: HTMLElement[] = []
 
+  private warmupProgress: number
   private progress = { value: 0 }
 
   constructor({ sizes }: Experience) {
@@ -15,13 +16,17 @@ export class Preloader {
       '.preloader__columns',
     )
     const counter = document.querySelector<HTMLElement>('.preloader__counter')
+    const warmup = window.__preloaderWarmup
 
-    if (!root || !columnsRoot || !counter) {
+    if (!root || !columnsRoot || !counter || !warmup) {
       throw new Error('Preloader elements not found')
     }
 
+    warmup.stop()
+
     this.root = root
     this.counter = counter
+    this.warmupProgress = warmup.progress
 
     const count = Math.round(sizes.size.x / sizes.pixelRatio / 175)
 
@@ -35,16 +40,19 @@ export class Preloader {
     })
   }
 
-  setProgress = throttle(300, (value: number) => {
-    const onUpdate = () => {
-      this.counter.textContent = String(Math.round(this.progress.value * 100))
-    }
+  private onUpdate = () => {
+    const { value } = this.progress
+    const progress = this.warmupProgress * (1 - value) + value
 
+    this.counter.textContent = (100 * progress).toFixed()
+  }
+
+  setProgress = throttle(300, (value: number) => {
     gsap.to(this.progress, {
       value,
       duration: 0.3,
       ease: 'power3.out',
-      onUpdate,
+      onUpdate: this.onUpdate,
     })
   })
 

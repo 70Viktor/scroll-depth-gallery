@@ -54,6 +54,70 @@
         <div class="preloader__columns"></div>
         <p class="preloader__counter">0</p>
       </div>
+      <script>
+        ;(() => {
+          const counter = document.querySelector('.preloader__counter')
+          console.log(counter)
+
+          if (!counter) return
+
+          const lerp = (a, b, t) => a + t * (b - a)
+
+          const warmupTargets = [
+            4 + Math.floor(Math.random() * 4),
+            8 + Math.floor(Math.random() * 8),
+            16 + Math.floor(Math.random() * 16),
+          ]
+          let targetIndex = 0
+          let current = 0
+          let target = warmupTargets[targetIndex]
+
+          let rafId = null
+          let timeoutId = null
+          let isPaused = false
+
+          const tick = () => {
+            console.log(target, targetIndex)
+            if (isPaused) return
+
+            current = lerp(current, target, 0.06)
+            counter.textContent = current.toFixed()
+
+            if (Math.abs(target - current) < 0.1) {
+              current = target
+              counter.textContent = current.toFixed()
+
+              if (targetIndex + 1 === warmupTargets.length) return
+
+              targetIndex += 1
+              isPaused = true
+
+              timeoutId = setTimeout(() => {
+                target = warmupTargets[targetIndex]
+                isPaused = false
+                rafId = requestAnimationFrame(tick)
+              }, 300)
+
+              return
+            }
+
+            rafId = requestAnimationFrame(tick)
+          }
+
+          rafId = requestAnimationFrame(tick)
+
+          window.__preloaderWarmup = {
+            stop() {
+              if (rafId) cancelAnimationFrame(rafId)
+              if (timeoutId) clearTimeout(timeoutId)
+            },
+
+            get progress() {
+              return current / 100
+            },
+          }
+        })()
+      </script>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
