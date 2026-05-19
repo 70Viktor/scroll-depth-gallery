@@ -10,6 +10,7 @@
     <main>
       <canvas id="experience"></canvas>
       <div class="ui">
+        <div class="ui__author"></div>
         <div class="ui__info info">
           <span class="info__year">0000</span>
           <h2 class="info__title">Название картины</h2>
@@ -20,46 +21,92 @@
           position: fixed;
           inset: 0;
           z-index: 100;
-          background: #c8af9e;
           display: grid;
           place-items: center;
           cursor: wait;
         }
 
-        .preloader__columns {
+        .preloader__overlay {
           position: absolute;
           z-index: 0;
           inset: 0;
-          display: flex;
+          width: 100%;
+          height: 100%;
         }
 
-        .preloader__column {
-          flex-grow: 1;
-          background: #c8af9e;
-          clip-path: inset(0% 0% 0% 0%);
-          will-change: clip-path;
+        .preloader__hole {
+          will-change: transform;
         }
 
-        .preloader__counter {
-          position: absolute;
+        .preloader__badge {
+          position: relative;
           z-index: 1;
-          color: #000000;
+          overflow: hidden;
+          display: grid;
+          place-items: center;
+          background: #f3f1ef;
+          border-radius: 24px;
+          min-width: 6ch;
+          aspect-ratio: 16 / 9;
           font-family: 'Roboto', monospace, sans-serif;
           font-size: 4rem;
           font-weight: 400;
+          will-change: transform, opacity;
+        }
+
+        .preloader__fill {
+          --progress: 0;
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          background: #c8af9e;
+          transform: scaleX(var(--progress));
+          transform-origin: left;
+        }
+
+        .preloader__counter {
+          color: #000000;
+          text-align: center;
           font-variant-numeric: tabular-nums;
         }
       </style>
       <div class="preloader">
-        <div class="preloader__columns"></div>
-        <p class="preloader__counter">0</p>
+        <svg class="preloader__overlay">
+          <defs>
+            <mask id="preloader-mask">
+              <rect width="100%" height="100%" fill="white" />
+
+              <rect
+                class="preloader__hole"
+                x="0"
+                y="0"
+                width="0"
+                height="0"
+                rx="24"
+                fill="black"
+              />
+            </mask>
+          </defs>
+
+          <rect
+            width="100%"
+            height="100%"
+            fill="#e3dbd6"
+            mask="url(#preloader-mask)"
+          />
+        </svg>
+
+        <div class="preloader__badge">
+          <div class="preloader__fill"></div>
+          <div class="preloader__counter">0</div>
+        </div>
       </div>
       <script>
         ;(() => {
           const counter = document.querySelector('.preloader__counter')
-          console.log(counter)
+          const fill = document.querySelector('.preloader__fill')
 
-          if (!counter) return
+          if (!counter || !fill) return
 
           const lerp = (a, b, t) => a + t * (b - a)
 
@@ -76,16 +123,20 @@
           let timeoutId = null
           let isPaused = false
 
+          const update = (newCurrent) => {
+            current = newCurrent
+            counter.textContent = current.toFixed()
+            fill.style.setProperty('--progress', current / 100)
+          }
+
           const tick = () => {
             console.log(target, targetIndex)
             if (isPaused) return
 
-            current = lerp(current, target, 0.06)
-            counter.textContent = current.toFixed()
+            update(lerp(current, target, 0.06))
 
             if (Math.abs(target - current) < 0.1) {
-              current = target
-              counter.textContent = current.toFixed()
+              update(target)
 
               if (targetIndex + 1 === warmupTargets.length) return
 
@@ -96,7 +147,7 @@
                 target = warmupTargets[targetIndex]
                 isPaused = false
                 rafId = requestAnimationFrame(tick)
-              }, 300)
+              }, 250)
 
               return
             }

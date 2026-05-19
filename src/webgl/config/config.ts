@@ -4,8 +4,8 @@ import * as THREE from 'three'
 export const config = {
   camera: {
     fov: 45,
-    near: 0.5,
-    far: 30,
+    near: 1,
+    far: 100,
     position: new THREE.Vector3(0, 0, 8),
   },
   scroll: {
@@ -17,7 +17,7 @@ export const config = {
   gallery: {
     gap: 8,
     count: data.length,
-    recycleThreshold: 12,
+    recycleThreshold: 8,
     startWorld: 0,
     activeZ: -2.5,
 
@@ -36,8 +36,8 @@ export const config = {
     },
   },
   fade: {
-    from: 5,
-    to: 2,
+    from: 3.5,
+    to: 1,
   },
   parallax: {
     smooth: 0.04,
@@ -56,4 +56,4 @@ export const config = {
     breathSmooth: 0.04,
     breathStrength: 0.1,
   },
-}
+} as const

@@ -1,86 +1,107 @@
-import type { Experience } from '@webgl'
 import gsap from 'gsap'
 import { throttle } from 'throttle-debounce'
 
 export class Preloader {
   private root: HTMLElement
   private counter: HTMLElement
-  private columns: HTMLElement[] = []
+  private badge: HTMLElement
+  private fill: HTMLElement
+  private hole: SVGRectElement
 
   private warmupProgress: number
-  private progress = { value: 0 }
+  private progressRef = { current: 0 }
 
-  constructor({ sizes }: Experience) {
+  constructor() {
     const root = document.querySelector<HTMLElement>('.preloader')
-    const columnsRoot = document.querySelector<HTMLElement>(
-      '.preloader__columns',
-    )
     const counter = document.querySelector<HTMLElement>('.preloader__counter')
+    const badge = document.querySelector<HTMLElement>('.preloader__badge')
+    const fill = document.querySelector<HTMLElement>('.preloader__fill')
+    const hole = document.querySelector<SVGRectElement>('.preloader__hole')
+
     const warmup = window.__preloaderWarmup
 
-    if (!root || !columnsRoot || !counter || !warmup) {
+    if (!root || !counter || !badge || !fill || !hole || !warmup) {
       throw new Error('Preloader elements not found')
     }
 
-    warmup.stop()
-
     this.root = root
     this.counter = counter
+    this.badge = badge
+    this.fill = fill
+    this.hole = hole
+
+    warmup.stop()
     this.warmupProgress = warmup.progress
-
-    const count = Math.round(sizes.size.x / sizes.pixelRatio / 175)
-
-    this.columns = Array.from({ length: count }).map(() => {
-      const column = document.createElement('div')
-      column.className = 'preloader__column'
-
-      columnsRoot.appendChild(column)
-
-      return column
-    })
-  }
-
-  private onUpdate = () => {
-    const { value } = this.progress
-    const progress = this.warmupProgress * (1 - value) + value
-
-    this.counter.textContent = (100 * progress).toFixed()
+    this.progressRef.current = warmup.progress
   }
 
   setProgress = throttle(300, (value: number) => {
-    gsap.to(this.progress, {
-      value,
+    const target = value + this.warmupProgress * (1 - value)
+
+    gsap.to(this.progressRef, {
+      current: target,
       duration: 0.3,
       ease: 'power3.out',
-      onUpdate: this.onUpdate,
+      onUpdate: () => {
+        this.counter.textContent = (this.progressRef.current * 100).toFixed()
+      },
+    })
+
+    gsap.to(this.fill, {
+      scaleX: target,
+      duration: 0.5,
+      ease: 'power3.out',
     })
   })
 
-  hide = () => {
-    const tl = gsap.timeline({
-      delay: 0.5,
-      onComplete: () => this.root.remove(),
-    })
+  hide = (): GSAPTimeline => {
+    const { width, height, x, y } = this.badge.getBoundingClientRect()
+    const rx = parseFloat(window.getComputedStyle(this.badge).borderRadius)
+    const scale = 4
 
-    tl.set(this.root, {
-      background: 'rgba(0, 0, 0, 0)',
-      cursor: 'default',
-    })
+    const tl = gsap.timeline({ onComplete: () => this.root.remove() })
 
-    tl.to(this.counter, {
-      autoAlpha: 0,
-      duration: 0.3,
+    tl.set(this.hole, { width, height, x, y, rx })
+
+    tl.to(this.badge, {
+      opacity: 0,
+      duration: 0.5,
       ease: 'none',
     })
+
     tl.to(
-      this.columns,
+      this.badge,
       {
-        clipPath: 'inset(0% 0% 0% 100%)',
-        duration: 0.7,
+        scale,
+        borderRadius: rx / scale,
+        duration: 1,
         ease: 'power2.inOut',
-        stagger: 0.03,
       },
-      '<',
+      0,
     )
+
+    tl.to(
+      this.hole,
+      {
+        width: width * scale,
+        height: height * scale,
+        x: x - (width * (scale - 1)) / 2,
+        y: y - (height * (scale - 1)) / 2,
+        duration: 1,
+        ease: 'power2.inOut',
+      },
+      0,
+    )
+
+    tl.to(this.hole, {
+      width: window.innerWidth + rx * 2,
+      height: window.innerHeight + rx * 2,
+      x: -rx,
+      y: -rx,
+      duration: 1,
+      ease: 'expo.inOut',
+    })
+
+    return tl
   }
 }

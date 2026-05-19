@@ -9,6 +9,7 @@ export class ScrollController {
   normalizedVelocity = 0
   direction: 1 | -1 = 1
   hasScrolled = false
+  enabled = false
 
   constructor() {
     window.addEventListener('wheel', this.handleWheel, { passive: false })
@@ -16,6 +17,8 @@ export class ScrollController {
 
   private handleWheel = (event: WheelEvent) => {
     event.preventDefault()
+
+    if (!this.enabled) return
 
     const { speed } = config.scroll
 
@@ -25,6 +28,10 @@ export class ScrollController {
 
     this.target = roundTo(this.target + delta, 3)
     this.direction = delta > 0 ? 1 : -1
+  }
+
+  enable() {
+    this.enabled = true
   }
 
   update() {

@@ -3,7 +3,7 @@ import { getColorLuminance } from '@utils'
 import gsap from 'gsap'
 
 export class GalleryInfo {
-  private activeIndex = -1
+  private activeIndex = 0
 
   private title: HTMLElement
   private year: HTMLElement
@@ -18,6 +18,17 @@ export class GalleryInfo {
 
     this.title = title
     this.year = year
+  }
+
+  intro(): GSAPTimeline {
+    const tl = gsap.timeline({ defaults: { duration: 1, ease: 'expo.inOut' } })
+
+    tl.from([this.year, this.title], {
+      x: 100,
+      stagger: 0.05,
+    })
+
+    return tl
   }
 
   setActiveIndex(index: number) {

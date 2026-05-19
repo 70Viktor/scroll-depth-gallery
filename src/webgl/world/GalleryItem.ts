@@ -1,5 +1,6 @@
 import type { Size } from '@utils'
 import type { Experience } from '@webgl'
+import gsap from 'gsap'
 import * as THREE from 'three'
 import { config } from '../config'
 import { galleryShaders } from '../shaders'
@@ -7,6 +8,7 @@ import { galleryShaders } from '../shaders'
 export interface GalleryItemOptions {
   texture: THREE.Texture
   worldPosition: THREE.Vector3
+  introPosition: THREE.Vector3
   size: Size
 }
 
@@ -19,6 +21,7 @@ export class GalleryItem {
   private wrapper: THREE.Group
 
   private worldPosition: THREE.Vector3
+  private afterIntroPosition: THREE.Vector3
   private recycledCount = 0
   private scrollOffset = 0
   private parallaxOffset = new THREE.Vector2()
@@ -26,7 +29,7 @@ export class GalleryItem {
   size: Size
 
   constructor(experience: Experience, options: GalleryItemOptions) {
-    const { texture, worldPosition, size } = options
+    const { texture, worldPosition, introPosition, size } = options
     const { deformation } = config.gallery
     this.experience = experience
 
@@ -43,7 +46,8 @@ export class GalleryItem {
       vertexShader: galleryShaders.vertex,
       fragmentShader: galleryShaders.fragment,
     })
-    this.worldPosition = worldPosition
+    this.worldPosition = introPosition
+    this.afterIntroPosition = worldPosition
     this.size = size
 
     this.mesh = new THREE.Mesh(this.geometry, this.material)
@@ -57,6 +61,18 @@ export class GalleryItem {
 
   get resultZ(): number {
     return this.wrapper.position.z
+  }
+
+  intro(): GSAPTween {
+    const { x, y, z } = this.afterIntroPosition
+
+    return gsap.to(this.worldPosition, {
+      x,
+      y,
+      z,
+      duration: 1,
+      ease: 'expo.inOut',
+    })
   }
 
   updateWorldPositionZ(z: number) {

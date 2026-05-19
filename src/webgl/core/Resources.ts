@@ -2,7 +2,6 @@ import { data } from '@data'
 import * as THREE from 'three'
 
 type ProgressCallback = (progress: number) => void
-type LoadCallback = () => void
 
 export class Resources {
   textures: THREE.Texture[] = []
@@ -14,7 +13,6 @@ export class Resources {
   private textureLoader = new THREE.TextureLoader()
 
   private progressCallbacks = new Set<ProgressCallback>()
-  private loadCallbacks = new Set<LoadCallback>()
 
   async load() {
     const promises = data.map(({ src }) => {
@@ -24,25 +22,15 @@ export class Resources {
     this.total = promises.length
 
     this.textures = await Promise.all(promises)
-
-    this.emitLoad()
   }
 
   onProgress(callback: ProgressCallback) {
     this.progressCallbacks.add(callback)
   }
 
-  onLoad(callback: LoadCallback) {
-    this.loadCallbacks.add(callback)
-  }
-
   private emitProgress() {
     console.log(this.progress)
     this.progressCallbacks.forEach((callback) => callback(this.progress))
-  }
-
-  private emitLoad() {
-    this.loadCallbacks.forEach((callback) => callback())
   }
 
   private loadTexture(src: string): Promise<THREE.Texture> {

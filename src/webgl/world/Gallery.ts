@@ -1,6 +1,7 @@
 import { data } from '@data'
-import { vector2To3, type Size } from '@utils'
+import { type Size } from '@utils'
 import type { Experience } from '@webgl'
+import gsap from 'gsap'
 import * as THREE from 'three'
 import { Breath } from '../animations'
 import { config } from '../config'
@@ -23,7 +24,7 @@ export class Gallery {
   }
 
   private create() {
-    const { gap, startWorld } = config.gallery
+    const { startWorld, gap } = config.gallery
 
     data.forEach((item, index) => {
       const texture = this.experience.resources.getTexture(index)
@@ -32,22 +33,34 @@ export class Gallery {
         width: item.width,
         height: item.width / aspect,
       }
-      const worldPosition = vector2To3(item.offset, startWorld - index * gap)
+      const { x, y } = item.offset
+      const worldPosition = new THREE.Vector3(x, y, startWorld - index * gap)
+      const introPosition = new THREE.Vector3(
+        x * 0.7 * index,
+        y * 0.7 * index,
+        startWorld - index * gap * 0.25,
+      )
 
-      const options: GalleryItemOptions = { texture, size, worldPosition }
+      const options: GalleryItemOptions = {
+        texture,
+        size,
+        worldPosition,
+        introPosition,
+      }
       const galleryItem = new GalleryItem(this.experience, options)
 
       this.items.push(galleryItem)
     })
   }
 
-  updateLayout() {
-    const { gap } = config.gallery
+  intro(): GSAPTimeline {
+    const tl = gsap.timeline()
 
-    this.items.forEach((item, index) => {
-      item.updateWorldPositionZ(-index * gap)
+    this.items.forEach((item) => {
+      tl.add(item.intro(), 0)
     })
-    this.update()
+
+    return tl
   }
 
   update() {
