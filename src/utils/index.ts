@@ -1,3 +1,4 @@
+export * from './breakpoints'
 export * from './createBgPalette'
 export * from './getColorLuminance'
 export * from './roundTo'

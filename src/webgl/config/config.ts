@@ -4,6 +4,7 @@ import * as THREE from 'three'
 export const config = {
   camera: {
     fov: 45,
+    fovMd: 60,
     near: 1,
     far: 100,
     position: new THREE.Vector3(0, 0, 8),
@@ -19,7 +20,7 @@ export const config = {
     count: data.length,
     recycleThreshold: 8,
     startWorld: 0,
-    activeZ: -2.5,
+    activeZ: -2,
 
     deformation: {
       strength: 0.3,

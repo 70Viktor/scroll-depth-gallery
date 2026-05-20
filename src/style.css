@@ -1,5 +1,7 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html,
@@ -12,46 +14,115 @@ body {
 }
 
 :root {
-  --text-color: '#FFFFFF';
+  --text-color: '#000000';
   font-family: 'Roboto', monospace, sans-serif;
   font-size: 16px;
   color: var(--text-color);
 }
 
-.webgl {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
+.webgl,
 .ui {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
   pointer-events: none;
 }
 
-.ui__info {
-  position: absolute;
-  bottom: 15rem;
-  right: 4rem;
+.webgl {
+  z-index: 0;
+}
+
+.ui {
+  z-index: 1;
+
+  .ui__header,
+  .ui__info,
+  .ui__footer {
+    position: absolute;
+    pointer-events: auto;
+  }
+
+  .ui__header {
+    top: 1.6rem;
+    left: 4rem;
+  }
+
+  .ui__info {
+    bottom: 15rem;
+    right: 4rem;
+  }
+
+  .ui__footer {
+    bottom: 1.6rem;
+    left: 4rem;
+  }
+
+  @media (max-width: 768px) {
+    .ui__header {
+      top: 0.8rem;
+      left: 2rem;
+    }
+
+    .ui__info {
+      bottom: 9rem;
+      right: 2rem;
+    }
+
+    .ui__footer {
+      bottom: 0.8rem;
+      left: 2rem;
+    }
+  }
+}
+
+.artist {
+  .artist__text {
+    opacity: 0.6;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .artist__fullname {
+    display: inline;
+    font-size: 1rem;
+    font-weight: 600;
+  }
 }
 
 .info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  display: grid;
+  place-items: end;
   gap: 0.4rem;
-  pointer-events: auto;
+
+  .info__year,
+  .info__title {
+    font-size: 1.2rem;
+    line-height: 1;
+    font-weight: 400;
+    margin: 0;
+  }
 }
 
-.info__year,
-.info__title {
-  font-size: 1.2rem;
-  line-height: 1;
-  font-weight: 500;
-  margin: 0;
+.developer {
+  font-style: normal;
+
+  .developer__text {
+    display: inline;
+    opacity: 0.6;
+  }
+}
+
+.tg-link {
+  position: relative;
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 600;
+
+  &::before {
+    position: absolute;
+    z-index: -1;
+    inset: -0.5rem;
+    content: '';
+  }
 }

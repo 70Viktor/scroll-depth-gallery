@@ -1,3 +1,4 @@
+import img0 from './0.jpg'
 import img1 from './1.jpg'
 import img2 from './2.jpg'
 import img3 from './3.jpg'
@@ -8,6 +9,7 @@ import img7 from './7.jpg'
 import img8 from './8.jpg'
 
 export const images = {
+  0: img0,
   1: img1,
   2: img2,
   3: img3,

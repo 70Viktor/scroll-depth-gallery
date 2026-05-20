@@ -57,7 +57,7 @@ export class Preloader {
   hide = (): GSAPTimeline => {
     const { width, height, x, y } = this.badge.getBoundingClientRect()
     const rx = parseFloat(window.getComputedStyle(this.badge).borderRadius)
-    const scale = 4
+    const scale = Math.max(1, (window.innerWidth * 0.65) / width)
 
     const tl = gsap.timeline({ onComplete: () => this.root.remove() })
 

@@ -18,10 +18,10 @@ export class Camera {
   constructor(experience: Experience) {
     this.experience = experience
 
-    const { fov, near, far, position } = config.camera
+    const { near, far, position } = config.camera
 
     this.instance = new THREE.PerspectiveCamera(
-      fov,
+      this.fov,
       this.experience.sizes.aspectRatio,
       near,
       far,
@@ -37,8 +37,17 @@ export class Camera {
     this.experience.scene.add(this.instance)
   }
 
+  private get fov(): number {
+    const { isMd } = this.experience.sizes
+    const { fov, fovMd } = config.camera
+
+    return isMd ? fovMd : fov
+  }
+
   resize() {
-    this.instance.aspect = this.experience.sizes.aspectRatio
+    const { aspectRatio } = this.experience.sizes
+    this.instance.aspect = aspectRatio
+    this.instance.fov = this.fov
     this.instance.updateProjectionMatrix()
   }
 

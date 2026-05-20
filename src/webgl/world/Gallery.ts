@@ -38,7 +38,7 @@ export class Gallery {
       const introPosition = new THREE.Vector3(
         x * 0.7 * index,
         y * 0.7 * index,
-        startWorld - index * gap * 0.25,
+        startWorld - index * gap * 0.3,
       )
 
       const options: GalleryItemOptions = {

@@ -1,2 +1,2 @@
-export * from './GalleryInfo'
 export * from './Preloader'
+export * from './UI'

@@ -29,7 +29,6 @@ export class Resources {
   }
 
   private emitProgress() {
-    console.log(this.progress)
     this.progressCallbacks.forEach((callback) => callback(this.progress))
   }
 

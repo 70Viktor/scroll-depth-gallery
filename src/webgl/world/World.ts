@@ -1,4 +1,4 @@
-import { GalleryInfo, Preloader } from '@ui'
+import { Preloader, UI } from '@ui'
 import gsap from 'gsap'
 import type { Experience } from '../Experience'
 import { Background } from './Background'
@@ -10,7 +10,7 @@ export class World {
   private environment: Environment
   private background: Background
   private gallery: Gallery | null = null
-  private info: GalleryInfo
+  private ui: UI
   private preloader: Preloader
 
   constructor(experience: Experience) {
@@ -19,7 +19,7 @@ export class World {
     this.environment = new Environment(this.experience)
     this.background = new Background(this.experience)
 
-    this.info = new GalleryInfo()
+    this.ui = new UI()
     this.preloader = new Preloader()
 
     this.init()
@@ -41,7 +41,7 @@ export class World {
     introTl.add(this.preloader.hide(), 0)
     introTl.add(camera.intro(), 0)
     introTl.add(this.gallery.intro(), 1)
-    introTl.add(this.info.intro(), 1)
+    introTl.add(this.ui.intro(), 1)
   }
 
   resize() {
@@ -58,12 +58,13 @@ export class World {
     this.background.setActiveIndex(activeIndex)
     this.background.update()
 
-    this.info.setActiveIndex(activeIndex)
+    this.ui.setActiveIndex(activeIndex)
   }
 
   destroy() {
     this.environment.destroy()
     this.background.destroy()
+    this.ui.destroy()
     this.gallery?.destroy()
   }
 }

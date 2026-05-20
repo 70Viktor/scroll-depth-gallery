@@ -1,3 +1,4 @@
+import { breakpoints } from '@utils'
 import * as THREE from 'three'
 
 const pixelRatio = () => Math.min(window.devicePixelRatio, 2)
@@ -32,6 +33,10 @@ export class Sizes {
     this.pixelRatio = pixelRatio()
 
     this.callbacks.forEach((callback) => callback())
+  }
+
+  get isMd(): boolean {
+    return this.size.x <= breakpoints.md
   }
 
   onResize(callback: ResizeCallback) {
