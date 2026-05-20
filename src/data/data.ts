@@ -18,7 +18,7 @@ export const data: DataItem[] = [
     src: images[0],
     offset: new THREE.Vector2(0, 0),
     width: 2,
-    title: 'Альбом: Всё, что в сердце...',
+    title: 'Альбом: Всё, что в сердце…',
     year: 2025,
     ...createBgPalette('#88644F', 'dark'),
   },
