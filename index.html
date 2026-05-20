@@ -10,11 +10,26 @@
     <main>
       <canvas id="experience"></canvas>
       <div class="ui">
-        <div class="ui__author"></div>
-        <div class="ui__info info">
-          <span class="info__year">0000</span>
-          <h2 class="info__title">Название картины</h2>
-        </div>
+        <header class="ui__header">
+          <h1 class="title">Всё, что в сердце...</h1>
+        </header>
+        <article class="ui__info info">
+          <span class="info__year">2012</span>
+          <h2 class="info__title">Мое родное село</h2>
+        </article>
+        <footer class="ui__footer">
+          <address class="author">
+            <p class="author__text">сайт разработал</p>
+            <a
+              href="https://t.me/ViktorSidenko"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="author__link tg-link"
+            >
+              Виктор Сиденко
+            </a>
+          </address>
+        </footer>
       </div>
       <style>
         .preloader {
@@ -52,6 +67,13 @@
           font-size: 4rem;
           font-weight: 400;
           will-change: transform, opacity;
+
+          @media (max-width: 768px) {
+            border-radius: 16px;
+            font-size: 2.5rem;
+            min-width: 5ch;
+            aspect-ratio: 9 / 16;
+          }
         }
 
         .preloader__fill {
@@ -130,7 +152,6 @@
           }
 
           const tick = () => {
-            console.log(target, targetIndex)
             if (isPaused) return
 
             update(lerp(current, target, 0.06))
