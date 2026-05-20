@@ -4,16 +4,18 @@ import * as THREE from 'three'
 export const config = {
   camera: {
     fov: 45,
-    fovMd: 60,
+    fovMd: 75,
     near: 1,
     far: 100,
     position: new THREE.Vector3(0, 0, 8),
   },
   scroll: {
     smooth: 0.04,
-    speed: 0.25,
+    wheelSpeed: 0.25,
+    touchSpeed: 1.5,
     toWorldFactor: 0.045,
-    maxVelocity: 1.5,
+    maxVelocity: 1.8,
+    velocitySmooth: 0.1,
   },
   gallery: {
     gap: 8,
