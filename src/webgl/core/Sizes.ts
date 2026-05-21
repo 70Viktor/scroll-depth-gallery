@@ -6,7 +6,8 @@ const pixelRatio = () => Math.min(window.devicePixelRatio, 2)
 type ResizeCallback = () => void
 
 export class Sizes {
-  size = new THREE.Vector2()
+  readonly size = new THREE.Vector2()
+  readonly resolution = new THREE.Vector2()
   pixelRatio: number
 
   get aspectRatio() {
@@ -15,15 +16,16 @@ export class Sizes {
     return width / height
   }
 
-  get resolution() {
-    return this.size.multiplyScalar(this.pixelRatio)
-  }
-
   private callbacks: ResizeCallback[] = []
 
   constructor() {
     this.size.set(window.innerWidth, window.innerHeight)
     this.pixelRatio = pixelRatio()
+
+    this.resolution.set(
+      this.size.x * this.pixelRatio,
+      this.size.y * this.pixelRatio,
+    )
 
     window.addEventListener('resize', this.handleResize)
   }
@@ -31,6 +33,11 @@ export class Sizes {
   private handleResize = () => {
     this.size.set(window.innerWidth, window.innerHeight)
     this.pixelRatio = pixelRatio()
+
+    this.resolution.set(
+      this.size.x * this.pixelRatio,
+      this.size.y * this.pixelRatio,
+    )
 
     this.callbacks.forEach((callback) => callback())
   }
