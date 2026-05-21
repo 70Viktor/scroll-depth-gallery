@@ -26,16 +26,18 @@ export class GalleryItem {
   private scrollOffset = 0
   private parallaxOffset = new THREE.Vector2()
 
+  private visibleWhileIntro = true
+  private visible = true
+
   size: Size
 
   constructor(experience: Experience, options: GalleryItemOptions) {
     const { texture, worldPosition, introPosition, size } = options
-    const { deformation } = config.gallery
+    const { deformation } = config
     this.experience = experience
 
     this.geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
     this.material = new THREE.ShaderMaterial({
-      side: THREE.DoubleSide,
       transparent: true,
       uniforms: {
         u_texture: { value: texture },
@@ -72,11 +74,10 @@ export class GalleryItem {
       z,
       duration: 1,
       ease: 'expo.inOut',
+      onComplete: () => {
+        this.visibleWhileIntro = false
+      },
     })
-  }
-
-  updateWorldPositionZ(z: number) {
-    this.worldPosition.z = z
   }
 
   shiftRecycleCount(delta: number) {
@@ -84,10 +85,14 @@ export class GalleryItem {
   }
 
   setVelocity(velocity: number) {
+    if (!this.visible) return
+
     this.material.uniforms.u_velocity.value = velocity
   }
 
   setOpacity(opacity: number) {
+    if (!this.visible) return
+
     this.material.uniforms.u_opacity.value = THREE.MathUtils.clamp(
       opacity,
       0,
@@ -96,7 +101,15 @@ export class GalleryItem {
   }
 
   setScale(scale: number) {
+    if (!this.visible) return
+
     this.mesh.scale.set(this.size.width * scale, this.size.height * scale, 1)
+  }
+
+  setVisible(visible: boolean) {
+    this.visible = visible
+
+    this.mesh.visible = visible || this.visibleWhileIntro
   }
 
   update() {

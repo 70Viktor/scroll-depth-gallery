@@ -14,11 +14,12 @@ export class Camera {
   private intro1Position: THREE.Vector3
   private intro2Position: THREE.Vector3
   private basePosition: THREE.Vector3
+  private zeroPosition = new THREE.Vector3(0)
 
   constructor(experience: Experience) {
     this.experience = experience
 
-    const { near, far, position } = config.camera
+    const { near, far, z } = config.camera
 
     this.instance = new THREE.PerspectiveCamera(
       this.fov,
@@ -27,12 +28,13 @@ export class Camera {
       far,
     )
 
-    this.intro1Position = position.clone().add(intro1Offset)
-    this.intro2Position = position.clone().add(intro2Offset)
-    this.basePosition = position.clone()
+    this.basePosition = new THREE.Vector3(0, 0, z)
+
+    this.intro1Position = this.basePosition.clone().add(intro1Offset)
+    this.intro2Position = this.basePosition.clone().add(intro2Offset)
 
     this.instance.position.copy(this.intro1Position)
-    this.instance.lookAt(new THREE.Vector3(0))
+    this.instance.lookAt(this.zeroPosition)
 
     this.experience.scene.add(this.instance)
   }
@@ -52,10 +54,8 @@ export class Camera {
   }
 
   intro(): GSAPTimeline {
-    const zeroPosition = new THREE.Vector3(0)
-
     const tl = gsap.timeline({
-      onUpdate: () => this.instance.lookAt(zeroPosition),
+      onUpdate: () => this.instance.lookAt(this.zeroPosition),
     })
 
     tl.to(this.instance.position, {

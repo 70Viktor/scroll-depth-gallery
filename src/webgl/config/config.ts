@@ -1,13 +1,42 @@
 import { data } from '@data'
-import * as THREE from 'three'
 
-export const config = {
+const tuning = {
   camera: {
-    fov: 45,
-    fovMd: 75,
+    z: 8,
     near: 1,
     far: 100,
-    position: new THREE.Vector3(0, 0, 8),
+    fov: 45,
+    fovMd: 75,
+  },
+  gallery: {
+    gap: 8,
+    startWorldZ: 0,
+    itemActiveZ: -2,
+    renderItems: 3,
+    fadeDepth: 2.5,
+  },
+  deformation: {
+    strength: 0.3,
+  },
+} as const
+
+const { camera, gallery, deformation } = tuning
+
+const totalDepth = gallery.gap * data.length
+const recycleFromZ = tuning.camera.z - totalDepth
+const recycleToZ = camera.z
+const fadeFromZ = camera.z - camera.near - gallery.fadeDepth
+const fadeToZ = camera.z - camera.near
+const renderFromZ = camera.z - gallery.gap * gallery.renderItems
+const renderToZ = camera.z
+
+export const config = {
+  camera,
+  gallery: {
+    ...gallery,
+    totalDepth,
+    recycleFromZ,
+    recycleToZ,
   },
   scroll: {
     smooth: 0.04,
@@ -17,31 +46,15 @@ export const config = {
     maxVelocity: 1.8,
     velocitySmooth: 0.1,
   },
-  gallery: {
-    gap: 8,
-    count: data.length,
-    recycleThreshold: 8,
-    startWorld: 0,
-    activeZ: -2,
-
-    deformation: {
-      strength: 0.3,
-    },
-
-    get totalDepth(): number {
-      return this.gap * this.count
-    },
-    get frontThreshold(): number {
-      return this.recycleThreshold
-    },
-    get backThreshold(): number {
-      return this.recycleThreshold - this.totalDepth
-    },
-  },
   fade: {
-    from: 3.5,
-    to: 1,
+    from: fadeFromZ,
+    to: fadeToZ,
   },
+  render: {
+    from: renderFromZ,
+    to: renderToZ,
+  },
+  deformation,
   parallax: {
     smooth: 0.04,
     strengthX: 0.15,
@@ -55,7 +68,7 @@ export const config = {
     velocityFactor: 0.15,
   },
   bg: {
-    smooth: 0.01,
+    smooth: 0.04,
     breathSmooth: 0.04,
     breathStrength: 0.1,
   },

@@ -24,7 +24,7 @@ export class Gallery {
   }
 
   private create() {
-    const { startWorld, gap } = config.gallery
+    const { startWorldZ, gap } = config.gallery
 
     data.forEach((item, index) => {
       const texture = this.experience.resources.getTexture(index)
@@ -34,11 +34,11 @@ export class Gallery {
         height: item.width / aspect,
       }
       const { x, y } = item.offset
-      const worldPosition = new THREE.Vector3(x, y, startWorld - index * gap)
+      const worldPosition = new THREE.Vector3(x, y, startWorldZ - index * gap)
       const introPosition = new THREE.Vector3(
         x * 0.7 * index,
         y * 0.7 * index,
-        startWorld - index * gap * 0.3,
+        startWorldZ - index * gap * 0.3,
       )
 
       const options: GalleryItemOptions = {
@@ -64,46 +64,53 @@ export class Gallery {
   }
 
   update() {
-    const { gallery, camera, fade } = config
-    const scale = this.breath.update()
+    const { fade, render } = config
+    const breathScale = this.breath.update()
 
     this.items.forEach((item) => {
       item.update()
+      this.updateItemRecycle(item)
 
-      // recycle
-      while (item.resultZ > gallery.frontThreshold) {
-        item.shiftRecycleCount(-1)
-        item.update()
-      }
-      while (item.resultZ < gallery.backThreshold) {
-        item.shiftRecycleCount(1)
-        item.update()
-      }
+      const inRenderBand =
+        item.resultZ > render.from && item.resultZ < render.to
 
-      // deformation
+      item.setVisible(inRenderBand)
+
+      if (!inRenderBand) return
+
       const velocity = this.experience.scroll.normalizedVelocity
       item.setVelocity(velocity)
 
-      // fade
-      const distanceToCamera = Math.abs(camera.position.z - item.resultZ)
       const opacity =
-        1 - THREE.MathUtils.inverseLerp(fade.from, fade.to, distanceToCamera)
+        1 - THREE.MathUtils.inverseLerp(fade.from, fade.to, item.resultZ)
       item.setOpacity(opacity)
 
-      // breath
-      item.setScale(scale)
+      item.setScale(breathScale)
     })
 
     this.updateActiveIndex()
   }
 
+  private updateItemRecycle(item: GalleryItem) {
+    const { gallery } = config
+
+    while (item.resultZ > gallery.recycleToZ) {
+      item.shiftRecycleCount(-1)
+      item.update()
+    }
+    while (item.resultZ < gallery.recycleFromZ) {
+      item.shiftRecycleCount(1)
+      item.update()
+    }
+  }
+
   private updateActiveIndex() {
-    const { activeZ } = config.gallery
+    const { itemActiveZ } = config.gallery
 
     let activeItem: GalleryItem | null = null
 
     for (const item of this.items) {
-      if (item.resultZ >= activeZ) {
+      if (item.resultZ >= itemActiveZ) {
         if (!activeItem || item.resultZ < activeItem.resultZ) {
           activeItem = item
         }
