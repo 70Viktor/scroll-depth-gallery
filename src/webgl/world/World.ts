@@ -2,12 +2,10 @@ import { Preloader, UI } from '@ui'
 import gsap from 'gsap'
 import type { Experience } from '../Experience'
 import { Background } from './Background'
-import { Environment } from './Environment'
 import { Gallery } from './Gallery'
 
 export class World {
   private experience: Experience
-  private environment: Environment
   private background: Background
   private gallery: Gallery | null = null
   private ui: UI
@@ -16,7 +14,6 @@ export class World {
   constructor(experience: Experience) {
     this.experience = experience
 
-    this.environment = new Environment(this.experience)
     this.background = new Background(this.experience)
 
     this.ui = new UI()
@@ -62,7 +59,6 @@ export class World {
   }
 
   destroy() {
-    this.environment.destroy()
     this.background.destroy()
     this.ui.destroy()
     this.gallery?.destroy()

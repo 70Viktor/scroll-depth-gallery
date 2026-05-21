@@ -12,7 +12,7 @@ export class SmoothColor {
   }
 
   set value(value: THREE.ColorRepresentation) {
-    this.target.copy(new THREE.Color(value))
+    this.target.set(value)
   }
 
   get value() {
@@ -25,7 +25,7 @@ export class SmoothColor {
   }
 
   update(): THREE.Color {
-    this.current = this.current.lerp(this.target, this.smooth)
+    this.current.lerp(this.target, this.smooth)
 
     return this.current
   }
